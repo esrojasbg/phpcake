@@ -29,6 +29,7 @@ COPY ./app /var/www/html
 
 RUN chown -R www-data:www-data /var/www/html
 COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
+RUN chmod +x /var/www/html/bin/cake
 USER www-data
 
 EXPOSE 80
