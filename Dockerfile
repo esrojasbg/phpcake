@@ -29,5 +29,6 @@ COPY ./app /var/www/html
 
 RUN chown -R www-data:www-data /var/www/html
 COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
+USER www-data
 
 EXPOSE 80
