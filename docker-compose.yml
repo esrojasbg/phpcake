@@ -1,0 +1,40 @@
+version: '3'
+services:
+  # Servicio para la base de datos MySQL
+  mysql:
+    image: mysql:8.0
+    container_name: my-mysql 
+    restart: always  
+    environment:
+      MYSQL_ROOT_PASSWORD: toor
+      MYSQL_DATABASE: demo
+      MYSQL_USER: demo
+      MYSQL_PASSWORD: toor
+    volumes:
+      - ./data:/var/lib/mysql 
+      - ./script.sql:/docker-entrypoint-initdb.d/script.sql 
+
+    ports:
+      - "3307:3306"
+
+  cakephp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cakephp
+    restart: always
+    depends_on:
+      - mysql
+    environment:
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASS: toor
+      DB_NAME: demo
+    ports:
+      - "8080:80"
+    command: bash -c "sleep 10 && bin/cake bake all users && bin/cake bake all tags && bin/cake bake all bookmarks && bin/cake bake all Articles && apache2-foreground"
+    #volumes:
+    #  - ./app:/var/www/html
+
+volumes:
+  db_data:
